@@ -7,103 +7,109 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <style>
-	* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-}
-
-.title-bar {
-    background-color: red;
-    color: white;
-    text-align: center;
-    font-size: 24px;
-    padding: 15px;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 10;
-}
-
-.image-container {
-    margin-top: 70px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.image-card {
-    width: 9rem;
-    height: 16rem;
-    background-color: #fff;
-    border-radius: 3px;
-    margin: 10px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    animation: fadeIn 1s ease-in-out;
-}
-
-.image-card img {
-    width: 100%;
-    height: 100%;
-    border-radius: 3px;
-    object-fit: cover;
-}
-
-.image-card:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    justify-content: center;
-    align-items: center;
-    z-index: 20;
-}
-
-.popup-content {
-    background-color: white;
-    padding: 20px;
-    text-align: center;
-    border-radius: 5px;
-}
-
-.btn {
-    background-color: red;
-    color: white;
-    padding: 10px;
-    margin: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 3px;
-}
-
-.btn:hover {
-    background-color: darkred;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
-    to {
-        opacity: 1;
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
     }
-}
-	</style>
+
+    .title-bar {
+        background-color: red;
+        color: white;
+        text-align: center;
+        font-size: 24px;
+        padding: 15px;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 10;
+    }
+
+    .image-container {
+        margin-top: 70px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .image-card {
+        width: 9rem;
+        height: 16rem;
+        background-color: #fff;
+        border-radius: 3px;
+        margin: 10px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    .image-card img {
+        width: 100%;
+        height: 100%;
+        border-radius: 3px;
+        object-fit: cover;
+    }
+
+    .image-card:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        justify-content: center;
+        align-items: center;
+        z-index: 20;
+    }
+
+    .popup-content {
+        background-color: white;
+        padding: 20px;
+        text-align: center;
+        border-radius: 5px;
+    }
+
+    .popup-content img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        background-color: red;
+        color: white;
+        padding: 10px;
+        margin: 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .btn:hover {
+        background-color: darkred;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+</style>
 <body>
     <div class="title-bar">Online Santali Image</div>
     <div id="image-container" class="image-container"></div>
@@ -111,70 +117,89 @@ body {
     <!-- Popup Modal -->
     <div id="popup" class="popup">
         <div class="popup-content">
+            <img id="popup-image" src="" alt="Selected Image">
             <p>Do you want to download this image?</p>
             <button id="download-btn" class="btn">Download</button>
             <button id="cancel-btn" class="btn">Cancel</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
-</body>
-<script>
-	document.addEventListener("DOMContentLoaded", () => {
-    const baseID = 'appz0eMeMmikuWgak';
-    const apiKey = 'patheDcSkkEcSTZnS.d228cccc64c20fc907a9682a695414a3214a0a2a14ff3d1b170e855d6e148d36';
-    const tableName = 'ImageURL';
-    const columnName = 'ImageURL';
-    const apiUrl = `https://api.airtable.com/v0/${baseID}/${tableName}?fields[]=${columnName}`;
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const baseID = 'appz0eMeMmikuWgak';
+            const apiKey = 'patheDcSkkEcSTZnS.d228cccc64c20fc907a9682a695414a3214a0a2a14ff3d1b170e855d6e148d36';
+            const tableName = 'ImageURL';
+            const columnName = 'ImageURL';
+            const apiUrl = `https://api.airtable.com/v0/${baseID}/${tableName}?fields[]=${columnName}`;
 
-    const imageContainer = document.getElementById('image-container');
-    const popup = document.getElementById('popup');
-    const downloadBtn = document.getElementById('download-btn');
-    const cancelBtn = document.getElementById('cancel-btn');
+            const imageContainer = document.getElementById('image-container');
+            const popup = document.getElementById('popup');
+            const popupImage = document.getElementById('popup-image');
+            const downloadBtn = document.getElementById('download-btn');
+            const cancelBtn = document.getElementById('cancel-btn');
 
-    fetch(apiUrl, {
-        headers: {
-            Authorization: `Bearer ${apiKey}`
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        const records = data.records;
-        records.forEach((record, index) => {
-            const imageURL = record.fields[columnName];
-            const card = createImageCard(imageURL);
-            imageContainer.appendChild(card);
+            let currentImageUrl = '';
 
-            // Show popup on every image click
-            card.addEventListener('click', () => {
-                popup.style.display = 'flex';
+            fetch(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${apiKey}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const records = data.records;
+                records.forEach((record, index) => {
+                    const imageURL = record.fields[columnName];
+                    const card = createImageCard(imageURL);
+                    imageContainer.appendChild(card);
+
+                    // Show popup on every image click
+                    card.addEventListener('click', () => {
+                        popupImage.src = imageURL;  // Show clicked image in the popup
+                        currentImageUrl = imageURL; // Store the current image URL
+                        popup.style.display = 'flex';
+                    });
+
+                    // Add progress bar every 10th image
+                    if ((index + 1) % 1000000000000 === 0) {
+                        const progressBar = createProgressBar();
+                        imageContainer.appendChild(progressBar);
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+            // Close popup
+            cancelBtn.addEventListener('click', () => {
+                popup.style.display = 'none';
             });
 
-            // Add progress bar every 10th image
-            if ((index + 1) % 1000000000 === 0) {
-                const progressBar = createProgressBar();
-                imageContainer.appendChild(progressBar);
+            // Download the image when "Download" button is clicked
+            downloadBtn.addEventListener('click', () => {
+                downloadImage(currentImageUrl);
+            });
+
+            // Functions to create elements
+            function createImageCard(url) {
+                const card = document.createElement('div');
+                card.classList.add('image-card');
+                const img = document.createElement('img');
+                img.src = url;
+                card.appendChild(img);
+                return card;
+            }
+
+            
+
+            function downloadImage(url) {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'downloaded_image.jpg'; // Set default download file name
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);  // Clean up after triggering download
             }
         });
-    })
-    .catch(error => console.error('Error fetching data:', error));
-
-    // Close popup
-    cancelBtn.addEventListener('click', () => {
-        popup.style.display = 'none';
-    });
-
-    // Functions to create elements
-    function createImageCard(url) {
-        const card = document.createElement('div');
-        card.classList.add('image-card');
-        const img = document.createElement('img');
-        img.src = url;
-        card.appendChild(img);
-        return card;
-    }
-
-    
-});
-	</script>
+    </script>
+</body>
 </html>
