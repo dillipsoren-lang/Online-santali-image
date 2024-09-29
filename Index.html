@@ -3,203 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Santali Image</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Santali Online Image</title>
+    <link rel="stylesheet" href="style.css">
+    	<style>
+    	body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.title-bar {
+    background-color: red;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    padding: 70px 20px 20px 20px; 
+}
+
+.grid-item {
+    position: relative;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.grid-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.modal-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.modal-actions {
+    margin-top: 15px;
+}
+
+.download-btn, .cancel-btn {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.download-btn {
+    background-color: green;
+    color: white;
+}
+
+.cancel-btn {
+    background-color: red;
+    color: white;
+}
+
+.download-btn:hover, .cancel-btn:hover {
+    opacity: 0.8;
+}
+    	</style>
 </head>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-    }
-
-    .title-bar {
-        background-color: red;
-        color: white;
-        text-align: center;
-        font-size: 24px;
-        padding: 15px;
-        position: fixed;
-        width: 100%;
-        top: 0;
-        z-index: 10;
-    }
-
-    .image-container {
-        margin-top: 70px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .image-card {
-        width: 9rem;
-        height: 16rem;
-        background-color: #fff;
-        border-radius: 3px;
-        margin: 10px;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-        animation: fadeIn 1s ease-in-out;
-    }
-
-    .image-card img {
-        width: 100%;
-        height: 100%;
-        border-radius: 3px;
-        object-fit: cover;
-    }
-
-    .image-card:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .popup {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        justify-content: center;
-        align-items: center;
-        z-index: 20;
-    }
-
-    .popup-content {
-        background-color: white;
-        padding: 20px;
-        text-align: center;
-        border-radius: 5px;
-    }
-
-    .popup-content img {
-        max-width: 100%;
-        height: auto;
-        margin-bottom: 15px;
-    }
-
-    .btn {
-        background-color: red;
-        color: white;
-        padding: 10px;
-        margin: 10px;
-        border: none;
-        cursor: pointer;
-        border-radius: 3px;
-    }
-
-    .btn:hover {
-        background-color: darkred;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-</style>
 <body>
-    <div class="title-bar">Online Santali Image</div>
-    <div id="image-container" class="image-container"></div>
+    <div class="title-bar">
+        SANTALI ONLINE IMAGE
+    </div>
+    <div id="imageGrid" class="grid-container"></div>
 
-    <!-- Popup Modal -->
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <img id="popup-image" src="" alt="Selected Image">
-            <p>Do you want to download this image?</p>
-            <button id="download-btn" class="btn">Download</button>
-            <button id="cancel-btn" class="btn">Cancel</button>
+    <!-- Pop-up modal -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="Image">
+            <div class="modal-actions">
+                <button id="downloadBtn" class="download-btn">Download</button>
+                <button id="cancelBtn" class="cancel-btn">Cancel</button>
+            </div>
         </div>
     </div>
 
+    <script src="script.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const baseID = 'appz0eMeMmikuWgak';
-            const apiKey = 'patheDcSkkEcSTZnS.d228cccc64c20fc907a9682a695414a3214a0a2a14ff3d1b170e855d6e148d36';
-            const tableName = 'ImageURL';
-            const columnName = 'ImageURL';
-            const apiUrl = `https://api.airtable.com/v0/${baseID}/${tableName}?fields[]=${columnName}`;
+    	const baseId = 'appz0eMeMmikuWgak';
+const apiToken = 'patheDcSkkEcSTZnS.d228cccc64c20fc907a9682a695414a3214a0a2a14ff3d1b170e855d6e148d36';
+const tableName = 'ImageURL';
+const columnName = 'ImageURL';
+const imageGrid = document.getElementById('imageGrid');
+const modal = document.getElementById('imageModal');
+const modalImage = document.getElementById('modalImage');
+const downloadBtn = document.getElementById('downloadBtn');
+let currentImageUrl = '';
 
-            const imageContainer = document.getElementById('image-container');
-            const popup = document.getElementById('popup');
-            const popupImage = document.getElementById('popup-image');
-            const downloadBtn = document.getElementById('download-btn');
-            const cancelBtn = document.getElementById('cancel-btn');
+// Fetch data from Airtable
+async function fetchImages() {
+    const url = `https://api.airtable.com/v0/${baseId}/${tableName}?fields[]=${columnName}`;
+    const response = await fetch(url, {
+        headers: {
+            Authorization: `Bearer ${apiToken}`
+        }
+    });
 
-            let currentImageUrl = '';
+    const data = await response.json();
+    displayImages(data.records);
+}
 
-            fetch(apiUrl, {
-                headers: {
-                    Authorization: `Bearer ${apiKey}`
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                const records = data.records;
-                records.forEach((record, index) => {
-                    const imageURL = record.fields[columnName];
-                    const card = createImageCard(imageURL);
-                    imageContainer.appendChild(card);
+// Display images in the grid
+function displayImages(images) {
+    images.forEach(record => {
+        const imageUrl = record.fields[columnName];
+        const gridItem = document.createElement('div');
+        gridItem.classList.add('grid-item');
+        gridItem.innerHTML = `<img src="${imageUrl}" alt="Image" />`;
 
-                    // Show popup on every image click
-                    card.addEventListener('click', () => {
-                        popupImage.src = imageURL;  // Show clicked image in the popup
-                        currentImageUrl = imageURL; // Store the current image URL
-                        popup.style.display = 'flex';
-                    });
-
-                    // Add progress bar every 10th image
-                    if ((index + 1) % 1000000000000 === 0) {
-                        const progressBar = createProgressBar();
-                        imageContainer.appendChild(progressBar);
-                    }
-                });
-            })
-            .catch(error => console.error('Error fetching data:', error));
-
-            // Close popup
-            cancelBtn.addEventListener('click', () => {
-                popup.style.display = 'none';
-            });
-
-            // Download the image when "Download" button is clicked
-            downloadBtn.addEventListener('click', () => {
-                downloadImage(currentImageUrl);
-            });
-
-            // Functions to create elements
-            function createImageCard(url) {
-                const card = document.createElement('div');
-                card.classList.add('image-card');
-                const img = document.createElement('img');
-                img.src = url;
-                card.appendChild(img);
-                return card;
-            }
-
-            
-
-            function downloadImage(url) {
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'downloaded_image.jpg'; // Set default download file name
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);  // Clean up after triggering download
-            }
+        gridItem.addEventListener('click', () => {
+            showImageModal(imageUrl);
         });
-    </script>
+
+        imageGrid.appendChild(gridItem);
+    });
+}
+
+// Show modal on image click
+function showImageModal(imageUrl) {
+    currentImageUrl = imageUrl;
+    modalImage.src = imageUrl;
+    modal.style.display = 'block';
+}
+
+// Close modal
+document.getElementById('cancelBtn').addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+// Download image
+downloadBtn.addEventListener('click', () => {
+    const a = document.createElement('a');
+    a.href = currentImageUrl;
+    a.download = 'image.jpg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    modal.style.display = 'none';
+});
+
+// Fetch images on page load
+fetchImages();
+    	</script>
 </body>
-</html>
+    </html>
